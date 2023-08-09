@@ -1,0 +1,25 @@
+# Use the official Python image as the base image
+FROM python:3.9
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Create and activate a virtual environment
+RUN python -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+
+# Copy the requirements file into the container
+COPY requirements.txt .
+COPY postRequest.py .
+
+# Install the required dependencies in the virtual environment
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the POST app files into the container
+# COPY postRequestAPI .
+
+# Expose the port that the FastAPI application will run on (default is 8000)
+EXPOSE 8000
+
+# Command to run the FastAPI application
+CMD ["/venv/bin/uvicorn", "postRequest:app", "--host", "127.0.0.1", "--port", "8000"]
